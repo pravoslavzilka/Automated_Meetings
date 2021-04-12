@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, time
 from time import sleep
 from threading import Thread
 import webbrowser
@@ -16,7 +16,7 @@ schedule2 = {
     "sjl":datetime(2021,4,10,23,35),
     "fyz":datetime(2021,4,11,2,35)
 }
-times = [datetime(2021,4,10,23,35),datetime(2021,4,11,23,35),datetime(2021,4,11,2,35)]
+times = [time(14,30),time(14,20),time(16)]
 
 
 @user_bp.route("/sign_in/")
@@ -27,28 +27,22 @@ def login_page():
 @user_bp.route("/main_app/")
 def main_app():
 
-    date_time = datetime.now() + timedelta(days=1)
-    start_time = schedule[1]["start"]
-    value, name = find_the_lesson(schedule2)
-    print(name," : ",value)
     date_time = schedule[1]["start"]
     sleep_for = (date_time - date_time.now()).total_seconds()
     name_of_day = date_time.strftime("%A")
-    print(name_of_day)
-    if sleep_for < 0:
-        date_time = schedule[1]["end"]
 
+    date_time = datetime(datetime.now().year,datetime.now().month,datetime.now().day,times[0].hour,times[0].minute)
+    print(find_the_lesson(times))
     return render_template("user/main_app.html", count_down=date_time)
 
 
-def find_the_lesson(kwargs):
-    times2 = []
-    times2_names = []
-    for name,value in kwargs.items():
-        times2_names.append(name)
-        times2.append(value)
-    later = filter(lambda d: d > datetime.now(), times2)
+def find_the_lesson(times2):
+    times3 = []
+    for item in times2:
+        item = datetime(datetime.now().year, datetime.now().month, datetime.now().day,item.hour,item.minute,item.second)
+        times3.append(item)
+    print(times3)
+    later = filter(lambda d: d > datetime.now(), times3)
     nearest_lesson = min(later, key=lambda d: abs(d - datetime.now()))
-    index = times2.index(nearest_lesson)
-    return nearest_lesson, times2_names[index]
+    return nearest_lesson
 
