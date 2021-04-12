@@ -1,0 +1,5 @@
+setup.py
+automate_meetings.egg-info/PKG-INFO
+automate_meetings.egg-info/SOURCES.txt
+automate_meetings.egg-info/dependency_links.txt
+automate_meetings.egg-info/top_level.txt
