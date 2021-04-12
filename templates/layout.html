@@ -36,22 +36,22 @@
             <a class="nav-link" href="#">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Schedule</a>
+            <a class="nav-link" href="{{url_for('user_bp.main_app')}}">Start the day</a>
           </li>
 
 
         </ul>
         <form class="form-inline my-2 my-lg-0">
-          <button class="btn btn-outline-light my-2 my-sm-0" style="margin-right:10px;" type="submit">Sign in</button>
+          <a class="btn btn-outline-light my-2 my-sm-0" href="{{url_for('user_bp.login_page')}}" style="margin-right:10px;" type="submit">Sign in</a>
           <button class="btn btn-success my-2 my-sm-0" style="margin-right:30px;" type="submit">Sign up</button>
         </form>
       </div>
     </nav>
-    <main>
+    <main class="content">
         {% block content %}{% endblock content %}
     </main>
 
-    <footer style="margin-top:150px;" id="footer" class="page-footer font-small indigo " >
+    <footer class="footer">
 	      <div id="footer-lop" >
 	      <!-- Footer Links -->
 	      <div class="container">
