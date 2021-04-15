@@ -14,7 +14,7 @@ class User(Base):
     permit = Column(Integer)
 
     def __repr__(self):
-        return self.name
+        return self.username
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
