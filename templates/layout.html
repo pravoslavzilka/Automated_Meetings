@@ -42,7 +42,7 @@
             <a class="nav-link" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Your schedules</a>
+            <a class="nav-link" href="{{url_for('user_bp.user_schedules')}}">Your schedules</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{url_for('user_bp.main_app')}}">Start the day</a>
@@ -56,7 +56,7 @@
 		  	<button class="btn btn-success my-2 my-sm-0" style="margin-right:30px;" type="submit">Account</button>
 		  {% else %}
           	<a class="btn btn-outline-primary my-2 my-sm-0" href="{{url_for('user_bp.login_page')}}" style="margin-right:10px;" type="submit">Sign in</a>
-          	<button class="btn btn-success my-2 my-sm-0" style="margin-right:30px;" type="submit">Sign up</button>
+          	<a class="btn btn-success my-2 my-sm-0" href="{{url_for('user_bp.sign_up')}}" style="margin-right:30px;" type="submit">Sign up</a>
 		  {% endif %}
       </div>
     </nav>

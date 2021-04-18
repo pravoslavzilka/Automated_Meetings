@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from datetime import timedelta, datetime, time
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from database import db_session
 from models import User
 import requests
@@ -34,6 +34,9 @@ def get_google_provider_cfg():
 
 @user_bp.route("/sign_in/",methods=["GET"])
 def login_page():
+    if current_user.is_authenticated:
+        return redirect(url_for("user_bp.main_app"))
+
     return render_template("user/login_page.html")
 
 
@@ -41,75 +44,11 @@ def login_page():
 def login_page2():
     user = User.query.filter(User.email == request.form["email"]).first()
     if user and user.check_password(request.form["password"]):
-        login_user(user)
+        login_user(user,remember=True)
         flash("Welcome back to our page","success")
         return redirect(url_for("user_bp.main_app"))
     flash("Your email or password is incorrect","danger")
     return render_template("user/login_page.html",email=request.form["email"])
-
-
-@user_bp.route("/sign_in-google/")
-def sign_in_google():
-    # Find out what URL to hit for Google login
-    google_provider_cfg = get_google_provider_cfg()
-    res = google_provider_cfg.json()
-    authorization_endpoint = res["authorization_endpoint"]
-
-    # Use library to construct the request for Google login and provide
-    # scopes that let you retrieve user's profile from Google
-    request_uri = client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri=request.base_url + "/callback",
-        scope=["openid", "email", "profile"],
-    )
-    return redirect(request_uri)
-
-
-@user_bp.route("/sign_in-google/callback")
-def callback():
-    # Get authorization code Google sent back to you
-    code = request.args.get("code")
-
-    google_provider_cfg = get_google_provider_cfg()
-    token_endpoint = google_provider_cfg["token_endpoint"]
-
-    token_url, headers, body = client.prepare_token_request(
-        token_endpoint,
-        authorization_response=request.url,
-        redirect_url=request.base_url,
-        code=code
-    )
-    token_response = requests.post(
-        token_url,
-        headers=headers,
-        data=body,
-        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
-    )
-
-    # Parse the tokens!
-    client.parse_request_body_response(json.dumps(token_response.json()))
-    userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
-    uri, headers, body = client.add_token(userinfo_endpoint)
-    userinfo_response = requests.get(uri, headers=headers, data=body)
-
-    if userinfo_response.json().get("email_verified"):
-        unique_id = userinfo_response.json()["sub"]
-        users_email = userinfo_response.json()["email"]
-        picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
-    else:
-        return "User email not available or not verified by Google.", 400
-
-    user = User(
-        id_=unique_id, username=users_name, email=users_email, permit=0)
-
-    if not User.query.filter(User.id == unique_id).first():
-        db_session.add(user)
-        db_session.commit()
-
-    login_user(user)
-    flash("Welcome !","success")
-    return redirect(url_for("user_bp.main_app"))
 
 
 @user_bp.route("/sign_out/")
@@ -122,7 +61,34 @@ def logout():
 
 @user_bp.route("/sign_up/",methods=["GET"])
 def sign_up():
+    if current_user.is_authenticated:
+        return redirect(url_for("user_bp.main_app"))
+
     return render_template("user/register_page.html")
+
+
+@user_bp.route("/sign_up/",methods=["POST"])
+def sign_up2():
+    username = request.form["username"]
+    email = request.form["email"]
+    password = request.form["password"]
+    user = User.query.filter(User.email == email).first()
+    if user:
+        flash("User with this email address already exists","danger")
+        return render_template("user/register_page.html",username=username)
+
+    user = User.query.filter(User.username == username).first()
+    if user:
+        flash("User with this username already exists", "danger")
+        return render_template("user/register_page.html", email=email)
+
+    user = User(username=username, email=email, permit=0)
+    user.set_password(password)
+    db_session.add(user)
+    db_session.commit()
+    flash("Welcome to Automated Meetings!","success")
+    login_user(user)
+    return redirect(url_for("user_bp.main_app"))
 
 
 @user_bp.route("/main_app/")

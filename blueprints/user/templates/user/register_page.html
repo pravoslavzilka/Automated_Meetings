@@ -143,26 +143,27 @@
           </div>
           <div class="card-body">
             <h5 class="card-title text-center">Register</h5>
-            <form class="form-signin">
+            <form class="form-signin" method="post" action="{{url_for('user_bp.sign_up2')}}">
               <div class="form-label-group">
-                <input type="text" id="inputUserame" name="username" class="form-control" placeholder="Username" required autofocus>
+                <input type="text" id="inputUserame" name="username" value="{{username}}" class="form-control" placeholder="Username" required autofocus>
                 <label for="inputUserame">Username</label>
               </div>
 
               <div class="form-label-group">
-                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required>
+                <input type="email" id="inputEmail" name="email" value="{{email}}" class="form-control" placeholder="Email address" required>
                 <label for="inputEmail">Email address</label>
               </div>
 
               <hr>
 
               <div class="form-label-group">
-                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
-                <label for="inputPassword">Password</label>
+                <input type="password" pattern=".{8,20}" id="password-input" name="password" class="form-control" placeholder="Password" required>
+                <label for="password-input">Password</label>
+                <small class="text-center">Password have to be from 8 to 20 characters long</small>
               </div>
 
               <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button>
-              <a class="d-block text-center mt-2 small" href="#">Sign In</a>
+              <a class="d-block text-center mt-2 small" href="{{url_for('user_bp.login_page')}}">Sign In</a>
               <hr class="my-4">
               <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign up with Google</button>
               <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign up with Facebook</button>
@@ -173,5 +174,38 @@
     </div>
   </div>
 </body>
+
+<script>
+	(function() {
+	  'use strict';
+	  window.addEventListener('load', function() {
+	    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+	    var forms = document.getElementsByClassName('col-lg-6 offset-lg-3');
+	    // Loop over them and prevent submission
+	    var validation = Array.prototype.filter.call(forms, function(form) {
+	      form.addEventListener('submit', function(event) {
+	        if (form.checkValidity() === false) {
+	          event.preventDefault();
+	          event.stopPropagation();
+	        }
+	        form.classList.add('was-validated');
+	      }, false);
+	    });
+	  }, false);
+	})();
+	var form = document.getElementById("form-validation");
+    form.addEventListener("submit", function(event) {
+      if ( document.getElementById("password").value != document.getElementById("confirm_password").value ) {
+          alert("Password mismatch");
+          event.preventDefault();
+          event.stopPropagation();
+      }
+      else if (form.checkValidity() == false) {
+          event.preventDefault();
+          event.stopPropagation();
+      }
+      form.classList.add("was-validated");
+    }, false);
+</script>
 
 {% endblock content %}
