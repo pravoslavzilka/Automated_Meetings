@@ -146,7 +146,7 @@
             <form class="form-signin" method="post" action="{{url_for('user_bp.login_page2')}}">
 
               <div class="form-label-group">
-                <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required>
+                <input type="email" id="inputEmail" value="{{email}}" name="email" class="form-control" placeholder="Email address" required>
                 <label for="inputEmail">Email address</label>
               </div>
 
@@ -160,7 +160,7 @@
               <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
               <a class="d-block text-center mt-2 small" href="{{url_for('user_bp.sign_up')}}">Sign Up</a>
               <hr class="my-4">
-              <a href="{{url_for('user_bp.sign_in_google')}}" class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</a>
+              <a href="#" class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Sign in with Google</a>
               <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
             </form>
           </div>

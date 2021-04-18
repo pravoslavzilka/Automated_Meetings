@@ -3,7 +3,6 @@ from datetime import timedelta, datetime, time
 from flask_login import login_user, login_required, logout_user
 from database import db_session
 from models import User
-from oauthlib.oauth2 import WebApplicationClient
 import requests
 import json
 import os
@@ -18,8 +17,6 @@ GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
 
-# OAuth 2 client setup
-client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 schedule2 = {
     "mat":datetime(2021,4,11,23,35),
@@ -27,6 +24,8 @@ schedule2 = {
     "fyz":datetime(2021,4,11,2,35)
 }
 times = [time(23,59),time(14,20),time(16)]
+
+
 
 
 def get_google_provider_cfg():
@@ -45,7 +44,8 @@ def login_page2():
         login_user(user)
         flash("Welcome back to our page","success")
         return redirect(url_for("user_bp.main_app"))
-    return render_template("user/login_page.html")
+    flash("Your email or password is incorrect","danger")
+    return render_template("user/login_page.html",email=request.form["email"])
 
 
 @user_bp.route("/sign_in-google/")
@@ -126,8 +126,9 @@ def sign_up():
 
 
 @user_bp.route("/main_app/")
+@login_required
 def main_app():
-    date_time = schedule[1]["start"]
+    date_time = find_the_lesson(schedule2)
     sleep_for = (date_time - date_time.now()).total_seconds()
     name_of_day = date_time.strftime("%A")
 
@@ -137,12 +138,17 @@ def main_app():
 
 def find_the_lesson(times2):
     times3 = []
-    for item in times2:
+    for item in times2.values():
         item = datetime(int(datetime.now().year), int(datetime.now().month), int(datetime.now().day),item.hour,item.minute,item.second)
         times3.append(item)
 
     later = filter(lambda d: d > datetime.now(), times3)
     nearest_lesson = min(later, key=lambda d: abs(d - datetime.now()))
     return nearest_lesson
+
+
+@user_bp.route("/your_schedules/")
+def user_schedules():
+    return render_template("user/schedules.html")
 
 
