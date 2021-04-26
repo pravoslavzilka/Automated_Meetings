@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from datetime import timedelta, datetime, time
 from flask_login import login_user, login_required, logout_user, current_user
 from database import db_session
-from models import User
+from models import User, Schedule
 import requests
 import json
 import os
@@ -95,8 +95,6 @@ def sign_up2():
 @login_required
 def main_app():
     date_time = find_the_lesson(schedule2)
-    sleep_for = (date_time - date_time.now()).total_seconds()
-    name_of_day = date_time.strftime("%A")
 
     date_time = datetime(datetime.now().year,datetime.now().month,datetime.now().day,times[0].hour,times[0].minute)
     return render_template("user/main_app.html", count_down=date_time)
@@ -109,12 +107,38 @@ def find_the_lesson(times2):
         times3.append(item)
 
     later = filter(lambda d: d > datetime.now(), times3)
-    nearest_lesson = min(later, key=lambda d: abs(d - datetime.now()))
+    try:
+        nearest_lesson = min(later, key=lambda d: abs(d - datetime.now()))
+    except ValueError:
+        nearest_lesson = False
     return nearest_lesson
 
 
 @user_bp.route("/your_schedules/")
+@login_required
 def user_schedules():
-    return render_template("user/schedules.html")
+    own_tables = Schedule.query.filter(Schedule.admin_user == current_user.username).all()
+    tables = current_user.tables
+    return render_template("user/schedules.html",tables=tables,own_tables=own_tables)
+
+
+@user_bp.route("/table/<token>/")
+def view_table(token):
+    table = Schedule.query.filter(Schedule.key == token).first()
+    lessons = {
+        "mon": [var if var.day == "mon" else "none" for var in table.lessons],
+        "thu": [var if var.day == "thu" else "none" for var in table.lessons],
+        "wen": [var if var.day == "wen" else "none" for var in table.lessons],
+        "thur": [var if var.day == "thur" else "none" for var in table.lessons],
+        "fri": [var if var.day == "fri" else "none" for var in table.lessons],
+        "sat": [var if var.day == "sat" else "none" for var in table.lessons],
+        "sun": [var if var.day == "sun" else "none" for var in table.lessons],
+    }
+    return render_template("user/view_table.html", table=table, lessons=lessons)
+
+
+@user_bp.route("change_lesson/",methods=["POST"])
+def change_lesson():
+    return redirect(url_for("user_bp.view_table",token=request.form["token"]))
 
 

@@ -5,5 +5,15 @@
 {% endblock title %}
 
 {% block content %}
+    <h1>Your own tables:</h1>
+    <div>
 
+        {% if own_tables %}
+            {% for table in own_tables %}
+                {{ table.name }}
+            {% endfor %}
+        {% else %}
+            <p>You haven't any table yet, create some !</p>
+        {% endif %}
+    </div>
 {% endblock content %}
