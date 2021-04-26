@@ -118,7 +118,7 @@ def find_the_lesson(times2):
 @login_required
 def user_schedules():
     own_tables = Schedule.query.filter(Schedule.admin_user == current_user.username).all()
-    tables = current_user.tables
+    tables = list(set(current_user.tables) - set(own_tables))
     return render_template("user/schedules.html",tables=tables,own_tables=own_tables)
 
 

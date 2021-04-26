@@ -82,3 +82,31 @@ def change_lesson():
     flash("Lesson updated successfully","success")
     return redirect(url_for("table_bp.edit_table",token=request.form["token"]))
 
+
+@table_bp.route("/remove_lesson/<num>/<day>/<token>")
+def remove_lesson(num,day,token):
+    table = Schedule.query.filter(Schedule.key == token)
+    lesson = Lessons.query.filter(Lessons.table_id == table.id, Lessons.number == int(num), Lessons.day == day)
+    lesson.name = "none"
+    db_session.commit()
+    flash("Lesson remove successfully", "success")
+    return redirect(url_for("table_bp.edit_table",token=token))
+
+
+@table_bp.route("/create/", methods=["POST"])
+@login_required
+def create_table():
+    name = request.form["name"]
+    s = Schedule(name=name, admin_user=current_user.username)
+    db_session.add(s)
+    db_session.commit()
+
+    days = ["mon","thu","wen","thur","fri","sat","sun"]
+    for day in days:
+        for i in range(7):
+            l = Lessons(name="none",table_id=s.id,day=day,number=i+1)
+            db_session.add(l)
+
+    db_session.commit()
+    flash("Now you can add your lessons","info")
+    return redirect(url_for("table_bp.edit_table",token=s.key))

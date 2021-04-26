@@ -5,15 +5,119 @@
 {% endblock title %}
 
 {% block content %}
-    <h1>Your own tables:</h1>
-    <div>
 
+
+
+
+    <div>
+        <div class="row py-5 px-4" >
+         <div class="col-md-8 mx-auto">
+        <!-- Profile widget -->
+        <div class="bg-white shadow rounded overflow-hidden">
+        <h2>Your own schedules:</h2>
         {% if own_tables %}
             {% for table in own_tables %}
-                {{ table.name }}
+                <div class="card" style="margin:30px;">
+				  <div class="card-body">
+					  <img style="height:35px;margin-bottom:5px;margin-right:5px;" src="{{url_for('static',filename='images/s_icon.jpg')}}">
+					  <strong style="margin-left:15px;">{{ table.name }}</strong>
+                      {% if current_user.active_table_id == table.id %}
+                        <label class="font-italic" style="margin-left:10px;">(Active)</label>
+                      {% else %}
+                        <a href="#" style="margin-left:10px;" class="btn btn-warning">Activate</a>
+                      {% endif %}
+                      <a href="#" style="margin-right:10px" class="btn btn-danger  float-right">Delete</a>
+                      <a href="#" style="margin-right:10px" class="btn btn-secondary  float-right">Clone</a>
+                      <a href="{{url_for('table_bp.edit_table',token=table.key)}}" style="margin-right:10px" class="btn btn-primary  float-right">Edit</a>
+				  </div>
+				</div>
             {% endfor %}
         {% else %}
             <p>You haven't any table yet, create some !</p>
         {% endif %}
+        <div style="margin:30px;">
+			<div class="collapse" id="collapseExample">
+			  <div class="card card-body">
+				  <strong style="padding-bottom:5px;font-size: 18px;">New schedule:</strong>
+			    <form class="form-inline needs-validation" method="post" style="margin-top:10px;" action="{{url_for('table_bp.create_table')}}">
+				  <label style="padding-right:10px;padding-bottom:10px;">Name:</label>
+				  <input name="name"  type="text" class="form-control mb-2 mr-sm-2" id="validationCustom01" placeholder="Name" required>
+				  <button type="submit" class="btn btn-primary mb-2">Create</button>
+				</form>
+			  </div>
+			</div>
+			<p>
+			  <button id="add-own" style="margin-top:10px;" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+			    + Create your own schedule
+			  </button>
+			</p>
+		</div>
+        <div style="margin-top:80px;">
+            <h2>Saved schedules:</h2>
+        {% if tables %}
+            {% for table in tables %}
+                <div class="card" style="margin:30px;">
+				  <div class="card-body">
+					  <img style="height:35px;margin-bottom:5px;margin-right:5px;" src="{{url_for('static',filename='images/s_icon.jpg')}}">
+					  <strong style="margin-left:15px;">{{ table.name }}</strong>
+                      {% if current_user.active_table_id == table.id %}
+                        <label class="font-italic" style="margin-left:10px;">(Active)</label>
+                      {% else %}
+                        <a href="#" style="margin-left:10px;" class="btn btn-warning">Activate</a>
+                      {% endif %}
+                      <a href="#" style="margin-right:10px" class="btn btn-danger  float-right">Remove</a>
+                      <a href="#" style="margin-right:10px" class="btn btn-secondary  float-right">Clone</a>
+                      <a href="{{url_for('table_bp.view_table',token=table.key)}}" style="margin-right:10px" class="btn btn-primary  float-right">View</a>
+				  </div>
+				</div>
+            {% endfor %}
+        {% else %}
+            <p style="margin-left:30px;margin-top:30px;">You haven't any saved table yet, add some !</p>
+        {% endif %}
+        <div style="margin:30px;">
+			<div class="collapse" id="collapseExample2">
+			  <div class="card card-body">
+				  <strong style="padding-bottom:5px;font-size: 18px;">New schedule:</strong>
+			    <form class="form-inline needs-validation" method="post" style="margin-top:10px;" action="#">
+				  <label style="padding-right:10px;padding-bottom:10px;">Key:</label>
+				  <input name="key"  type="text" class="form-control mb-2 mr-sm-2" id="validationCustom01" placeholder="Key" required>
+				  <button type="submit" class="btn btn-primary mb-2">Add</button>
+				</form>
+			  </div>
+			</div>
+			<p>
+			  <button id="add-table" style="margin-top:10px; margin-bottom:300px;" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
+			    + Add Schedule
+			  </button>
+			</p>
+		</div>
+        </div>
+        </div>
+         </div>
+        </div>
     </div>
+
+<script>
+	$(document).ready(function(){
+	 $('#add-own').on('click', function () {
+	  var text=$('#add-own').text();
+	  if(text === "- Create your own schedule"){
+	    $(this).html('+ Create your own schedule');
+	  } else{
+	    $(this).text('- Create your own schedule');
+	 }
+	});
+	});
+	$(document).ready(function(){
+	 $('#add-table').on('click', function () {
+	  var text=$('#add-table').text();
+	  if(text === "- Add Schedule"){
+	    $(this).html('+ Add Schedule');
+	  } else{
+	    $(this).text('- Add Schedule');
+	 }
+	});
+	});
+</script>
+
 {% endblock content %}
