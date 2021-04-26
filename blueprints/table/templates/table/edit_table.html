@@ -1,0 +1,321 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Edit schedule {{ table.name }}
+{% endblock title %}
+
+{% block content %}
+    <style>
+      .none-object {
+        padding:20px;
+        text-align:center;
+        width:250px;
+      }
+      .td-main {
+        width:200px;
+        padding:10px;
+        text-align:center;
+      }
+       .text-center {
+          height:140px;
+       }
+    </style>
+
+    <body>
+      <div class="modal fade bd-example-modal-sm" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Lesson</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="post" action="{{url_for('table_bp.change_lesson',token=table.token)}}">
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
+                  <div class="col-sm-10 name">
+                    <input type="text" class="form-control" name="name" placeholder="Name" id="staticEmail" >
+                  </div>
+                </div>
+                <div class="form-group row d-none">
+                  <div class="col-sm-12 order ">
+                    <input type="text" class="form-control " name="num" placeholder="Order" id="order">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-2 col-form-label">Link</label>
+                  <div class="col-sm-10 link">
+                    <input type="url" class="form-control" name="link" placeholder="Link" id="staticEmail" >
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-2 col-form-label">Start</label>
+                  <div class="col-sm-10 start">
+                    <input type="time" class="form-control " style="width:95px;" name="start" id="start" required>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-2 col-form-label">End</label>
+                  <div class="col-sm-10 end">
+                    <input type="time" class="form-control" style="width:95px;" name="end" id="end" required>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="staticEmail" class="col-sm-2 col-form-label">Color</label>
+                  <div class="col-sm-10 col">
+                    <input type="color" id="favcolor" name="col" style="margin-top:7px;" class="form-control form-control-color" value="#ff0000">
+                  </div>
+                </div>
+                <div class="form-group row d-none">
+                  <div class="col-sm-12 day ">
+                    <input type="text" class="form-control" name="day" id="day">
+                  </div>
+                </div>
+                <div class="form-group row d-none">
+                  <div class="col-sm-12 id-table">
+                    <input type="text" class="form-control" value="{{table.id}}" name="id-table" id="id-table">
+                  </div>
+                </div>
+                <div class="form-group row d-none">
+                  <div class="col-sm-12 token">
+                    <input type="text" class="form-control" value="{{table.key}}" name="token" id="token">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Change lesson</button>
+
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="card col-lg-6 col-xl-6 mx-auto" style="margin:50px;">
+        <div class="card-body">
+          <h4 class="card-title">Info about schedule</h4>
+            <label><strong>Name</strong>: {{ table.name }}</label> <br/>
+            <label><strong>Key</strong>: {{ table.key }}</label>  <br/>
+            <label><strong>Admin</strong>: {{ table.admin_user }}</label> <br/>
+            <label><strong>Total users</strong>: {{ table.users |length }}</label> <br/>
+            <label><strong>Active users</strong>: {{ table.active_users |length}}</label> <br/>
+          <div class="row">
+              <div class="col-lg-12">
+                  <button class="btn btn-secondary float-right">Clone</button>
+              </div>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+          <p>Click on the names of the lessons to modify the lesson.</p>
+        </div>
+      </div>
+        <table width="" style="margin-bottom:300px;" class="col-lg-11 col-xl-11 mx-auto">
+          <thead>
+            <tr>
+              <th class="text-center" scope="col">#</th>
+              <th class="text-center" scope="col">1</th>
+              <th class="text-center" scope="col">2</th>
+              <th class="text-center" scope="col">3</th>
+              <th class="text-center" scope="col">4</th>
+              <th class="text-center" scope="col">5</th>
+              <th class="text-center" scope="col">6</th>
+              <th class="text-center" scope="col">7</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="text-center" style="width:100px;" scope="row">Mon</th>
+              {% for lesson in lessons["mon"] %}
+                {% if lesson.name != "none" %}
+                  <td class="td-main">
+
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
+                      <div class="card-body">
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" href="{{ lesson.link }}">Link</a> <br/>
+                      </div>
+                    </div>
+
+                  </td>
+                {% else %}
+                  <td class="td-main">
+                    <button type="button" class="btn btn-primary" data-bookid="{{lesson.num}}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">Add lesson</button>
+                  </td>
+                {% endif %}
+              {% endfor %}
+
+            <tr>
+              <th class="text-center" scope="row">Thu</th>
+              {% for lesson in lessons["thu"] %}
+                {% if lesson.name != "none" %}
+
+                  <td class="td-main" >
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
+                      <div class="card-body">
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" href="{{ lesson.link }}">Link</a> <br/>
+                      </div>
+                    </div>
+                  </td>
+                {% else %}
+                  <td class="td-main" >
+                    <button type="button" class="btn btn-primary" data-bookid="{{ lesson.num }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">Add lesson</button>
+                  </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+            <tr>
+              <th class="text-center" scope="row">Wen</th>
+              {% for lesson in lessons["wen"] %}
+                {% if lesson.name != "none" %}
+
+                  <td class="td-main" >
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
+                      <div class="card-body">
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" href="{{ lesson.link }}">Link</a> <br/>
+                      </div>
+                    </div>
+                  </td>
+                {% else %}
+                  <td class="td-main" >
+                    <button type="button" class="btn btn-primary" data-bookid="{{ lesson.num }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">Add lesson</button>
+                  </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          <tr>
+              <th class="text-center" scope="row">Thur</th>
+              {% for lesson in lessons["thur"] %}
+                {% if lesson.name != "none" %}
+
+                  <td class="td-main" >
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
+                      <div class="card-body">
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" href="{{ lesson.link }}">Link</a> <br/>
+                      </div>
+                    </div>
+                  </td>
+                {% else %}
+                  <td class="td-main" >
+                    <button type="button" class="btn btn-primary" data-bookid="{{ lesson.num }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">Add lesson</button>
+                  </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+            <tr>
+              <th class="text-center" scope="row">Fri</th>
+              {% for lesson in lessons["fri"] %}
+                {% if lesson.name != "none" %}
+
+                  <td class="td-main" >
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
+                      <div class="card-body">
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" href="{{ lesson.link }}">Link</a> <br/>
+                      </div>
+                  </td>
+                {% else %}
+                  <td class="td-main" >
+                    <button type="button" class="btn btn-primary" data-bookid="{{ lesson.num }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">Add lesson</button>
+                  </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+            <tr>
+              <th class="text-center" scope="row">Sat</th>
+              {% for lesson in lessons["sat"] %}
+                {% if lesson.name != "none" %}
+
+                  <td class="td-main" >
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
+                      <div class="card-body">
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" href="{{ lesson.link }}">Link</a> <br/>
+                      </div>
+                    </div>
+                  </td>
+                {% else %}
+                  <td class="td-main" >
+                    <button type="button" class="btn btn-primary" data-bookid="{{ lesson.num }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">Add lesson</button>
+                  </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+            <tr>
+              <th class="text-center" scope="row">Sun</th>
+              {% for lesson in lessons["sun"] %}
+                {% if lesson.name != "none" %}
+
+                  <td class="td-main" >
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
+                      <div class="card-body">
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" href="{{ lesson.link }}">Link</a> <br/>
+                      </div>
+                    </div>
+                  </td>
+                {% else %}
+                  <td class="td-main" >
+                    <button type="button" class="btn btn-primary" data-bookid="{{ lesson.num }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">Add lesson</button>
+                  </td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+
+
+    </body>
+    <script>
+      $('#exampleModal').on('show.bs.modal', function (event) {
+        let bookId = $(event.relatedTarget).data('bookid');
+        let day = $(event.relatedTarget).data('day');
+        let name = $(event.relatedTarget).data('name');
+        let link = $(event.relatedTarget).data('link');
+        let start = $(event.relatedTarget).data('start');
+        let end = $(event.relatedTarget).data('end');
+        let col = $(event.relatedTarget).data('col');
+
+        $(this).find('.modal-body .order input').val(bookId);
+        $(this).find('.modal-body .day input').val(day);
+        $(this).find('.modal-body .col input').val(col);
+        $(this).find('.modal-body .start input').val(start);
+        $(this).find('.modal-body .end input').val(end);
+        $(this).find('.modal-body .name input').val(name);
+        $(this).find('.modal-body .link input').val(link);
+      })
+    </script>
+
+
+{% endblock content %}

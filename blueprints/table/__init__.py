@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, url_for, redirect, request, flash
-from flask_login import current_user
+from flask_login import current_user, login_required
 from models import Schedule, Lessons
 from database import db_session
 from datetime import time
@@ -23,7 +23,28 @@ def view_table(token):
     return render_template("table/view_table.html", table=table, lessons=lessons)
 
 
+@table_bp.route("edit/<token>/")
+@login_required
+def edit_table(token):
+    table = Schedule.query.filter(Schedule.key == token).first()
+    if table.admin_user == current_user.username:
+        lessons = {
+            "mon": [var for var in table.lessons if var.day == "mon"],
+            "thu": [var for var in table.lessons if var.day == "thu"],
+            "wen": [var for var in table.lessons if var.day == "wen"],
+            "thur": [var for var in table.lessons if var.day == "thur"],
+            "fri": [var for var in table.lessons if var.day == "fri"],
+            "sat": [var for var in table.lessons if var.day == "sat"],
+            "sun": [var for var in table.lessons if var.day == "sun"],
+        }
+        return render_template("table/edit_table.html", table=table, lessons=lessons)
+    else:
+        flash("You haven't permission to modify this schedule","danger")
+        return redirect(url_for("table_bp.view_table"))
+
+
 @table_bp.route("change_lesson/",methods=["POST"])
+@login_required
 def change_lesson():
     table_id = request.form["id-table"]
 
@@ -59,5 +80,5 @@ def change_lesson():
     db_session.commit()
 
     flash("Lesson updated successfully","success")
-    return redirect(url_for("table_bp.view_table",token=request.form["token"]))
+    return redirect(url_for("table_bp.edit_table",token=request.form["token"]))
 
