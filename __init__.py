@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for
 from flask_login import LoginManager
 from blueprints.user.__init__ import user_bp
+from blueprints.table.__init__ import table_bp
 from database import db_session
 from models import User
 import os
@@ -8,6 +9,7 @@ import os
 
 app = Flask(__name__)
 app.register_blueprint(user_bp, url_prefix="/user")
+app.register_blueprint(table_bp, url_prefix="/table")
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(16)
 
 # flask-login

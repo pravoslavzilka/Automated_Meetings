@@ -122,23 +122,4 @@ def user_schedules():
     return render_template("user/schedules.html",tables=tables,own_tables=own_tables)
 
 
-@user_bp.route("/table/<token>/")
-def view_table(token):
-    table = Schedule.query.filter(Schedule.key == token).first()
-    lessons = {
-        "mon": [var if var.day == "mon" else "none" for var in table.lessons],
-        "thu": [var if var.day == "thu" else "none" for var in table.lessons],
-        "wen": [var if var.day == "wen" else "none" for var in table.lessons],
-        "thur": [var if var.day == "thur" else "none" for var in table.lessons],
-        "fri": [var if var.day == "fri" else "none" for var in table.lessons],
-        "sat": [var if var.day == "sat" else "none" for var in table.lessons],
-        "sun": [var if var.day == "sun" else "none" for var in table.lessons],
-    }
-    return render_template("user/view_table.html", table=table, lessons=lessons)
-
-
-@user_bp.route("change_lesson/",methods=["POST"])
-def change_lesson():
-    return redirect(url_for("user_bp.view_table",token=request.form["token"]))
-
 
