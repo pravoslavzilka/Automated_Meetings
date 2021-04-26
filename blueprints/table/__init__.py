@@ -83,16 +83,6 @@ def change_lesson():
     return redirect(url_for("table_bp.edit_table",token=request.form["token"]))
 
 
-@table_bp.route("/remove_lesson/<num>/<day>/<token>")
-def remove_lesson(num,day,token):
-    table = Schedule.query.filter(Schedule.key == token)
-    lesson = Lessons.query.filter(Lessons.table_id == table.id, Lessons.number == int(num), Lessons.day == day)
-    lesson.name = "none"
-    db_session.commit()
-    flash("Lesson remove successfully", "success")
-    return redirect(url_for("table_bp.edit_table",token=token))
-
-
 @table_bp.route("/create/", methods=["POST"])
 @login_required
 def create_table():
@@ -108,5 +98,7 @@ def create_table():
             db_session.add(l)
 
     db_session.commit()
+    current_user.tables.append(s)
+    current_user.active_table_id = s.id
     flash("Now you can add your lessons","info")
     return redirect(url_for("table_bp.edit_table",token=s.key))

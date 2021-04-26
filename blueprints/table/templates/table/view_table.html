@@ -13,8 +13,13 @@
         width:250px;
       }
       .td-main {
-        width:220px;
+        width:200px;
+        padding:10px;
+        text-align:center;
       }
+       .text-center {
+          height:140px;
+       }
     </style>
 
     <body>
@@ -55,39 +60,43 @@
               <th class="text-center" style="width:100px;" scope="row">Mon</th>
               {% for lesson in lessons["mon"] %}
                 {% if lesson.name != "none" %}
-                  <td class="td-main" style="padding:20px;">
+                  <td class="td-main">
                     <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
-                      <div class="card-header">{{ lesson.name }}</div>
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
                       <div class="card-body">
-                        <h6 class="card-title">{{ lesson.start }} - {{ lesson.end }}</h6>
-                        <label class="card-text"><a style="color:white;" target="_blank" href="{{ lesson.link }}">Link</a></label> <br/>
-                        <label class="card-text"></label>
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" target="_blank" href="{{ lesson.link }}">Link</a> <br/>
                       </div>
                     </div>
                   </td>
                 {% else %}
-                  <td class="td-main">-</td>
+                  <td class="td-main">&times;</td>
                 {% endif %}
               {% endfor %}
 
-              <td class="none-object">-</td>
 
             <tr class="text-center">
               <th scope="row">Thu</th>
               {% for lesson in lessons["thu"] %}
                 {% if lesson.name != "none" %}
 
-                  <td class="td-main" style="padding:20px;">
-                    <div class="card text-white bg-{{ lesson.col }} mb-3" style="max-width: 18rem;">
-                      <div class="card-header">{{ lesson.name }}</div>
+                  <td class="td-main">
+
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
                       <div class="card-body">
-                        <h5 class="card-title">{{ lesson.start }} - {{ lesson.end }}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" target="_blank" href="{{ lesson.link }}">Link</a> <br/>
                       </div>
                     </div>
+
                   </td>
                 {% else %}
-                  <td class="td-main" style="padding:20px;">-</td>
+                  <td class="td-main" >&times;</td>
                 {% endif %}
               {% endfor %}
             </tr>
@@ -96,17 +105,21 @@
               {% for lesson in lessons["wen"] %}
                 {% if lesson.name != "none" %}
 
-                  <td class="td-main" style="padding:20px;">
-                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                      <div class="card-header">{{ lesson.name }}</div>
+                  <td class="td-main">
+
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
                       <div class="card-body">
-                        <h5 class="card-title">{{ lesson.start }} - {{ lesson.end }}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" target="_blank" href="{{ lesson.link }}">Link</a> <br/>
                       </div>
                     </div>
+
                   </td>
                 {% else %}
-                  <td class="td-main" style="padding:20px;">-</td>
+                  <td class="td-main">&times;</td>
                 {% endif %}
               {% endfor %}
             </tr>
@@ -115,17 +128,21 @@
               {% for lesson in lessons["thur"] %}
                 {% if lesson.name != "none" %}
 
-                  <td class="td-main" style="padding:20px;">
-                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                      <div class="card-header">{{ lesson.name }}</div>
+                  <td class="td-main">
+
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
                       <div class="card-body">
-                        <h5 class="card-title">{{ lesson.start }} - {{ lesson.end }}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" target="_blank" href="{{ lesson.link }}">Link</a> <br/>
                       </div>
                     </div>
+
                   </td>
                 {% else %}
-                  <td class="td-main" style="padding:20px;">-</td>
+                  <td class="td-main" >&times;</td>
                 {% endif %}
               {% endfor %}
             </tr>
@@ -134,17 +151,21 @@
               {% for lesson in lessons["fri"] %}
                 {% if lesson.name != "none" %}
 
-                  <td class="td-main" style="padding:20px;">
-                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                      <div class="card-header">{{ lesson.name }}</div>
+                  <td class="td-main">
+
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
                       <div class="card-body">
-                        <h5 class="card-title">{{ lesson.start }} - {{ lesson.end }}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" target="_blank" href="{{ lesson.link }}">Link</a> <br/>
                       </div>
                     </div>
+
                   </td>
                 {% else %}
-                  <td class="td-main" style="padding:20px;">-</td>
+                  <td class="td-main">&times;</td>
                 {% endif %}
               {% endfor %}
             </tr>
@@ -153,17 +174,21 @@
               {% for lesson in lessons["sat"] %}
                 {% if lesson.name != "none" %}
 
-                  <td class="td-main" style="padding:20px;">
-                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                      <div class="card-header">{{ lesson.name }}</div>
+                  <td class="td-main">
+
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
                       <div class="card-body">
-                        <h5 class="card-title">{{ lesson.start }} - {{ lesson.end }}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" target="_blank" href="{{ lesson.link }}">Link</a> <br/>
                       </div>
                     </div>
+
                   </td>
                 {% else %}
-                  <td class="td-main" style="padding:20px;">-</td>
+                  <td class="td-main">&times;</td>
                 {% endif %}
               {% endfor %}
             </tr>
@@ -172,17 +197,21 @@
               {% for lesson in lessons["sun"] %}
                 {% if lesson.name != "none" %}
 
-                  <td class="td-main" style="padding:20px;">
-                    <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                      <div class="card-header">{{ lesson.name }}</div>
+                 <td class="td-main">
+
+                    <div class="card text-white mb-3" style="max-width: 18rem;background-color:{{ lesson.col }};">
+                      <a style="color:white;"  type="button" data-bookid="{{ lesson.number }}" data-col="{{ lesson.col }}" data-name="{{ lesson.name }}" data-link="{{ lesson.link }}" data-start="{{ lesson.start.strftime('%H:%M') }}" data-end="{{ lesson.end.strftime('%H:%M') }}" data-day="{{ lesson.day }}" data-toggle="modal" data-target="#exampleModal">
+                        <div class="card-header">{{ lesson.name }}</div>
+                      </a>
                       <div class="card-body">
-                        <h5 class="card-title">{{ lesson.start }} - {{ lesson.end }}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <h6 class="card-title">{{ lesson.start.strftime('%H:%M') }} - {{ lesson.end.strftime('%H:%M') }}</h6>
+                        <a style="color:white;" target="_blank" href="{{ lesson.link }}">Link</a> <br/>
                       </div>
                     </div>
+
                   </td>
                 {% else %}
-                  <td class="td-main">-</td>
+                  <td class="td-main">&times;</td>
                 {% endif %}
               {% endfor %}
             </tr>
