@@ -97,8 +97,22 @@ def create_table():
             l = Lessons(name="none",table_id=s.id,day=day,number=i+1)
             db_session.add(l)
 
-    db_session.commit()
     current_user.tables.append(s)
     current_user.active_table_id = s.id
+    db_session.commit()
+
     flash("Now you can add your lessons","info")
     return redirect(url_for("table_bp.edit_table",token=s.key))
+
+
+@table_bp.route("/activate/<token>/")
+@login_required
+def activate_table(token):
+    table = Schedule.query.filter(Schedule.key == token).first()
+    current_user.activate_table_id = table.id
+    current_user.active_table = table
+    db_session.commit()
+
+    flash("Schedule activated","success")
+    return redirect(url_for("user_bp.user_schedules"))
+

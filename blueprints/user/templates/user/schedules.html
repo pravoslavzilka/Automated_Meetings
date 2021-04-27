@@ -24,7 +24,7 @@
                       {% if current_user.active_table_id == table.id %}
                         <label class="font-italic" style="margin-left:10px;">(Active)</label>
                       {% else %}
-                        <a href="#" style="margin-left:10px;" class="btn btn-warning">Activate</a>
+                        <a href="{{url_for('table_bp.activate_table',token=table.key)}}" style="margin-left:10px;" class="btn btn-warning">Activate</a>
                       {% endif %}
                       <a href="#" style="margin-right:10px" class="btn btn-danger  float-right">Delete</a>
                       <a href="#" style="margin-right:10px" class="btn btn-secondary  float-right">Clone</a>
@@ -63,7 +63,7 @@
                       {% if current_user.active_table_id == table.id %}
                         <label class="font-italic" style="margin-left:10px;">(Active)</label>
                       {% else %}
-                        <a href="#" style="margin-left:10px;" class="btn btn-warning">Activate</a>
+                        <a href="{{url_for('table_bp.activate_table',token=table.key)}}" style="margin-left:10px;" class="btn btn-warning">Activate</a>
                       {% endif %}
                       <a href="#" style="margin-right:10px" class="btn btn-danger  float-right">Remove</a>
                       <a href="#" style="margin-right:10px" class="btn btn-secondary  float-right">Clone</a>
