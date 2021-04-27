@@ -116,3 +116,58 @@ def activate_table(token):
     flash("Schedule activated","success")
     return redirect(url_for("user_bp.user_schedules"))
 
+
+@table_bp.route("/add/",methods=["POST"])
+def add_table():
+    token = request.form["key"]
+    table = Schedule.query.filter(Schedule.key == token).first()
+
+    if table:
+        if table in current_user.tables:
+            flash("You already have this table saved","info")
+            return redirect(url_for("user_bp.user_schedules"))
+        current_user.tables.append(table)
+        db_session.commit()
+        flash("Schedule added successfully","success")
+        return redirect(url_for("user_bp.user_schedules"))
+
+    else:
+        flash("No such a schedule, make sure you entered the right key","danger")
+        return redirect(url_for("user_bp.user_schedules"))
+
+
+@table_bp.route("/remove/<token>/")
+@login_required
+def remove_table(token):
+    table = Schedule.query.filter(Schedule.key == token).first()
+    current_user.tables.remove(table)
+    if current_user.active_table_id == table.id:
+        if current_user.tables:
+            current_user.active_table_id = current_user.tables[0].id
+        else:
+            current_user.active_table_id = None
+    db_session.commit()
+    flash("Schedule removed successfully","success")
+    return redirect(url_for("user_bp.user_schedules"))
+
+
+@table_bp.route("/delete/<token>")
+def delete_table(token):
+    table = Schedule.query.filter(Schedule.key == token).first()
+    if current_user.username == table.admin_user:
+        db_session.delete(table)
+        if current_user.active_table_id == table.id:
+            if current_user.tables:
+                current_user.active_table_id = current_user.tables[0].id
+            else:
+                current_user.active_table_id = None
+        for lesson in table.lessons:
+            db_session.delete(lesson)
+        db_session.commit()
+        flash("Schedule deleted successfully","success")
+        return redirect(url_for("user_bp.user_schedules"))
+    else:
+        flash("You haven't permission to delete this table","danger")
+        return redirect(url_for("user_bp.user_schedules"))
+
+
