@@ -39,8 +39,8 @@
                     <input type="text" class="form-control" name="name" placeholder="Name" id="name" >
                   </div>
                 </div>
-                <div class="form-group row">
-                  <div class="col-sm-12 order d-none">
+                <div class="form-group row d-none">
+                  <div class="col-sm-12 order">
                     <input type="text" class="form-control " name="num" placeholder="Order" id="order">
                   </div>
                 </div>
@@ -99,7 +99,22 @@
       <div class="card col-lg-6 col-xl-6 mx-auto" style="margin:50px;">
         <div class="card-body">
           <h4 class="card-title">Info about schedule</h4>
-            <label><strong>Name</strong>: {{ table.name }}</label> <br/>
+            <label id="name-of-table"><strong>Name</strong>: {{ table.name }}</label> <a id="abutton" href="#" style="padding-left:5px;" onclick="inputShow()">change</a> <br/>
+            <form class="form-inline d-none" id="new-name" method="post" action="{{url_for('table_bp.change_name_of_schedule')}}">
+              <div class="form-group row d-none">
+                  <div class="col-sm-12 token">
+                    <input type="text" class="form-control" value="{{table.key}}" name="token" id="token">
+                  </div>
+              </div>
+              <div class="form-group mb-2">
+                <label for="inputNewName" class="form-control-plaintext"><strong>New name</strong></label>
+              </div>
+              <div class="form-group mx-sm-3 mb-2">
+                <input type="text" class="form-control" name="new-name" id="inputNewName" placeholder="New name">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Save</button>
+              <button style="margin-left:10px;" type="button" onclick="inputHide()" class="btn btn-secondary mb-2">Cancel</button>
+            </form>
             <label><strong>Key</strong>: {{ table.key }}</label>  <br/>
             <label><strong>Admin</strong>: {{ table.admin_user }}</label> <br/>
             <label><strong>Total users</strong>: {{ table.users |length }}</label> <br/>
@@ -321,6 +336,23 @@
           document.getElementById("name").value = "none";
           document.getElementById("form1").submit();
         };
+       function inputShow() {
+        var label_name = document.getElementById("name-of-table");
+        var input_name = document.getElementById("new-name");
+        var a_button = document.getElementById("abutton");
+        input_name.classList.remove("d-none");
+        label_name.classList.add("d-none");
+        a_button.classList.add("d-none");
+      };
+      function inputHide(){
+        var label_name = document.getElementById("name-of-table");
+        var input_name = document.getElementById("new-name");
+        var a_button = document.getElementById("abutton");
+
+        input_name.classList.add("d-none");
+        label_name.classList.remove("d-none");
+        a_button.classList.remove("d-none");
+      }
 
     </script>
 

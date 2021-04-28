@@ -43,6 +43,15 @@ def edit_table(token):
         return redirect(url_for("table_bp.view_table"))
 
 
+@table_bp.route("/change_name/",methods=["POST"])
+def change_name_of_schedule():
+    token = request.form["token"]
+    table = Schedule.query.filter(Schedule.key == token).first()
+    table.name = request.form["new-name"]
+    db_session.commit()
+    return redirect(url_for("table_bp.edit_table",token=token))
+
+
 @table_bp.route("change_lesson/",methods=["POST"])
 @login_required
 def change_lesson():
