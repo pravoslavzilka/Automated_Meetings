@@ -106,7 +106,7 @@
             <label><strong>Active users</strong>: {{ table.active_users |length}}</label> <br/>
           <div class="row">
               <div class="col-lg-12">
-                  <button class="btn btn-secondary float-right">Clone</button>
+                  <a href="{{url_for('table_bp.clone_table',token=table.key)}}" class="btn btn-secondary float-right">Clone</a>
               </div>
           </div>
         </div>

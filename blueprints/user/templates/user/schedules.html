@@ -27,7 +27,7 @@
                         <a href="{{url_for('table_bp.activate_table',token=table.key)}}" style="margin-left:10px;" class="btn btn-warning">Activate</a>
                       {% endif %}
                       <a href="{{url_for('table_bp.delete_table',token=table.key)}}" style="margin-right:10px" class="btn btn-danger  float-right">Delete</a>
-                      <a href="#" style="margin-right:10px" class="btn btn-secondary  float-right">Clone</a>
+                      <a href="{{url_for('table_bp.clone_table',token=table.key)}}" style="margin-right:10px" class="btn btn-secondary  float-right">Clone</a>
                       <a href="{{url_for('table_bp.edit_table',token=table.key)}}" style="margin-right:10px" class="btn btn-primary  float-right">Edit</a>
 				  </div>
 				</div>
@@ -66,7 +66,7 @@
                         <a href="{{url_for('table_bp.activate_table',token=table.key)}}" style="margin-left:10px;" class="btn btn-warning">Activate</a>
                       {% endif %}
                       <a href="{{url_for('table_bp.remove_table',token=table.key)}}" style="margin-right:10px" class="btn btn-danger  float-right">Remove</a>
-                      <a href="#" style="margin-right:10px" class="btn btn-secondary  float-right">Clone</a>
+                      <a href="{{url_for('table_bp.clone_table',token=table.key)}}" style="margin-right:10px" class="btn btn-secondary  float-right">Clone</a>
                       <a href="{{url_for('table_bp.view_table',token=table.key)}}" style="margin-right:10px" class="btn btn-primary  float-right">View</a>
 				  </div>
 				</div>

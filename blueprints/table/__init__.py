@@ -74,7 +74,8 @@ def change_lesson():
         lesson.col = color
 
     else:
-        lesson = Lessons(name=name, link=link, start=start, end=end, col=color, number=order_l, day=day_l, table_id=table_id)
+        lesson = Lessons(name=name, link=link, start=start, end=end, col=color, number=order_l, day=day_l,
+                         table_id=table_id)
         db_session.add(lesson)
 
     db_session.commit()
@@ -94,8 +95,8 @@ def create_table():
     days = ["mon","thu","wen","thur","fri","sat","sun"]
     for day in days:
         for i in range(7):
-            l = Lessons(name="none",table_id=s.id,day=day,number=i+1)
-            db_session.add(l)
+            lesson = Lessons(name="none",table_id=s.id,day=day,number=i+1)
+            db_session.add(lesson)
 
     current_user.tables.append(s)
     current_user.active_table_id = s.id
@@ -127,6 +128,8 @@ def add_table():
             flash("You already have this table saved","info")
             return redirect(url_for("user_bp.user_schedules"))
         current_user.tables.append(table)
+        current_user.active_table_id = table.id
+        current_user.active_table = table
         db_session.commit()
         flash("Schedule added successfully","success")
         return redirect(url_for("user_bp.user_schedules"))
@@ -151,18 +154,20 @@ def remove_table(token):
     return redirect(url_for("user_bp.user_schedules"))
 
 
-@table_bp.route("/delete/<token>")
+@table_bp.route("/delete/<token>/")
 def delete_table(token):
     table = Schedule.query.filter(Schedule.key == token).first()
     if current_user.username == table.admin_user:
+
         db_session.delete(table)
+
         if current_user.active_table_id == table.id:
             if current_user.tables:
                 current_user.active_table_id = current_user.tables[0].id
             else:
                 current_user.active_table_id = None
-        for lesson in table.lessons:
-            db_session.delete(lesson)
+
+        Lessons.query.filter(Lessons.table_id == table.id).delete()
         db_session.commit()
         flash("Schedule deleted successfully","success")
         return redirect(url_for("user_bp.user_schedules"))
@@ -171,3 +176,18 @@ def delete_table(token):
         return redirect(url_for("user_bp.user_schedules"))
 
 
+@table_bp.route("/clone/<token>/")
+@login_required
+def clone_table(token):
+    table = Schedule.query.filter(Schedule.key == token).first()
+    new_table = Schedule(name=table.name + " clone", admin_user=current_user.username)
+
+    db_session.add(new_table)
+    for lesson in table.lessons:
+        new_lesson = Lessons(name=lesson.name,link=lesson.link,start=lesson.start,end=lesson.end,day=lesson.day,
+                             col=lesson.col, number=lesson.number,table_id=new_table.id)
+        db_session.add(new_lesson)
+
+    db_session.commit()
+    flash("Schedule cloned successfully","success")
+    return redirect(url_for("table_bp.edit_table",token=table.key))
