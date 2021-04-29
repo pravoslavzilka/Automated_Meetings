@@ -5,9 +5,43 @@
 {% endblock title %}
 
 {% block content %}
-    <h1>Your next lesson is in:</h1>
-    <!-- Display the countdown timer-->
-    <p id="demo"></p>
+    <div>
+        <div class="row py-5 px-4" >
+         <div class="col-md-8 mx-auto">
+        <!-- Profile widget -->
+        <div class="bg-white shadow text-center rounded overflow-hidden">
+            {% if lesson %}
+                <h1>Your next lesson is in:</h1>
+                <h3 style="padding-top:10px;" id="demo"></h3>
+                <div style="margin-top:40px; " class="card">
+                  <div class="card-header">
+                    Info about the lesson
+                  </div>
+                  <div class="card-body">
+                    <div>
+                        <label>Name</label>
+                        <label>{{ lesson.name }}</label>
+                    </div>
+                    <div>
+                        <label>Duration</label>
+                        <label>{{ duration }}</label>
+                    </div>
+                    <div>
+                        <a href="{{ lesson.link }}">Link</a>
+                    </div>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div>
+            {% else %}
+                <h1>No such a lesson today</h1>
+            {% endif %}
+        </div>
+         </div>
+       </div>
+    </div>
+
+
 
     <script>
     // Set the date we're counting down to
@@ -37,7 +71,9 @@
         clearInterval(x);
         document.getElementById("demo").innerHTML = "EXPIRED";
         window.open("https://www.w3schools.com");
-        window.location.href = "{{url_for('user_bp.main_app')}}";
+        {% if lesson %}
+            window.location.href = "{{ lesson.link }}";
+        {% endif %}
       }
     }, 1000);
     </script>

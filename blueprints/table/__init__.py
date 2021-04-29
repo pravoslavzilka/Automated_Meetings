@@ -12,13 +12,13 @@ table_bp = Blueprint("table_bp",__name__,template_folder="templates")
 def view_table(token):
     table = Schedule.query.filter(Schedule.key == token).first()
     lessons = {
-        "mon": [var for var in table.lessons if var.day == "mon"],
-        "thu": [var for var in table.lessons if var.day == "thu"],
-        "wen": [var for var in table.lessons if var.day == "wen"],
-        "thur": [var for var in table.lessons if var.day == "thur"],
-        "fri": [var for var in table.lessons if var.day == "fri"],
-        "sat": [var for var in table.lessons if var.day == "sat"],
-        "sun": [var for var in table.lessons if var.day == "sun"],
+        "mon": [var for var in table.lessons if var.day == "Monday"],
+        "thu": [var for var in table.lessons if var.day == "Tuesday"],
+        "wen": [var for var in table.lessons if var.day == "Wednesday"],
+        "thur": [var for var in table.lessons if var.day == "Thursday"],
+        "fri": [var for var in table.lessons if var.day == "Friday"],
+        "sat": [var for var in table.lessons if var.day == "Saturday"],
+        "sun": [var for var in table.lessons if var.day == "Sunday"],
     }
     return render_template("table/view_table.html", table=table, lessons=lessons)
 
@@ -29,13 +29,13 @@ def edit_table(token):
     table = Schedule.query.filter(Schedule.key == token).first()
     if table.admin_user == current_user.username:
         lessons = {
-            "mon": [var for var in table.lessons if var.day == "mon"],
-            "thu": [var for var in table.lessons if var.day == "thu"],
-            "wen": [var for var in table.lessons if var.day == "wen"],
-            "thur": [var for var in table.lessons if var.day == "thur"],
-            "fri": [var for var in table.lessons if var.day == "fri"],
-            "sat": [var for var in table.lessons if var.day == "sat"],
-            "sun": [var for var in table.lessons if var.day == "sun"],
+            "mon": [var for var in table.lessons if var.day == "Monday"],
+            "thu": [var for var in table.lessons if var.day == "Tuesday"],
+            "wen": [var for var in table.lessons if var.day == "Wednesday"],
+            "thur": [var for var in table.lessons if var.day == "Thursday"],
+            "fri": [var for var in table.lessons if var.day == "Friday"],
+            "sat": [var for var in table.lessons if var.day == "Saturday"],
+            "sun": [var for var in table.lessons if var.day == "Sunday"],
         }
         return render_template("table/edit_table.html", table=table, lessons=lessons)
     else:
@@ -101,7 +101,7 @@ def create_table():
     db_session.add(s)
     db_session.commit()
 
-    days = ["mon","thu","wen","thur","fri","sat","sun"]
+    days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
     for day in days:
         for i in range(7):
             lesson = Lessons(name="none",table_id=s.id,day=day,number=i+1)

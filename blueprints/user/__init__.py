@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from datetime import timedelta, datetime, time
+from datetime import timedelta, datetime, time, date
 from flask_login import login_user, login_required, logout_user, current_user
 from database import db_session
-from models import User, Schedule
+from models import User, Schedule, Lessons
 import requests
 import json
 import os
@@ -94,24 +94,45 @@ def sign_up2():
 @user_bp.route("/main_app/")
 @login_required
 def main_app():
-    date_time = find_the_lesson(schedule2)
+    table = current_user.active_table
+    if table:
+        day = datetime.now()
+        day = day.strftime("%A")
 
-    date_time = datetime(datetime.now().year,datetime.now().month,datetime.now().day,times[0].hour,times[0].minute)
-    return render_template("user/main_app.html", count_down=date_time)
+        lessons = Lessons.query.filter(Lessons.table_id == table.id, Lessons.day == day)
+
+        nearest_lesson,name_id = find_the_lesson(lessons)
+        if nearest_lesson:
+
+            actual_time = nearest_lesson
+
+            lesson = Lessons.query.filter(Lessons.id == name_id).first()
+            duration = datetime.combine(date.min,lesson.end) - datetime.combine(date.min,lesson.start)
+            return render_template("user/main_app.html", count_down=nearest_lesson, lesson=lesson, duration=duration)
+        return render_template("user/main_app.html", count_down=False)
+    return render_template("user/main_app.html", count_down=False)
 
 
 def find_the_lesson(times2):
     times3 = []
-    for item in times2.values():
-        item = datetime(int(datetime.now().year), int(datetime.now().month), int(datetime.now().day),item.hour,item.minute,item.second)
-        times3.append(item)
+    names = []
+    for item in times2:
+        if item.start:
+            names.append(item.id)
+            item = datetime(int(datetime.now().year), int(datetime.now().month), int(datetime.now().day),item.start.hour,item.start.minute,0)
+            times3.append(item)
+        continue
 
     later = filter(lambda d: d > datetime.now(), times3)
     try:
         nearest_lesson = min(later, key=lambda d: abs(d - datetime.now()))
+        index_l = times3.index(nearest_lesson)
+        name = names[index_l]
     except ValueError:
         nearest_lesson = False
-    return nearest_lesson
+        name = False
+
+    return nearest_lesson,name
 
 
 @user_bp.route("/your_schedules/")
