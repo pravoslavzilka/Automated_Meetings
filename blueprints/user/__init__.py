@@ -108,6 +108,7 @@ def main_app():
 
             lesson = Lessons.query.filter(Lessons.id == name_id).first()
             duration = datetime.combine(date.min,lesson.end) - datetime.combine(date.min,lesson.start)
+
             return render_template("user/main_app.html", count_down=nearest_lesson, lesson=lesson, duration=duration)
         return render_template("user/main_app.html", count_down=False)
     return render_template("user/main_app.html", count_down=False)

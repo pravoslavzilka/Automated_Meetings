@@ -5,5 +5,120 @@
 {% endblock title %}
 
 {% block content %}
-    home page
+
+    <style>
+        .li-item-help {
+            padding-top:10px;
+        }
+    </style>
+
+    <script>
+		$(document).ready(function(){
+  		 	$(".active").removeClass("active");
+  		 	$("#home").addClass("active");
+		});
+	</script>
+
+    <div>
+
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="card" style="width:400px; margin-top:75px;">
+                  <div class="card-body">
+                      <h1 style="font-family:Calibri;">Tired of every day connecting to online meetings ?</h1>
+
+                      <p style="padding-top:30px;padding-left:20px;"><strong>Our app will do this for you !</strong></p>
+                  </div>
+                </div>
+
+            </div>
+            <div class="col-8">
+                <img class="rounded" height="500" src="{{url_for('static',filename='images/record3.jpg')}}">
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-xl-12 mx-auto" style="margin-top:40px;">
+              <div class="card  flex-row my-5">
+                <div class="card-img-left d-none d-md-flex">
+                  <div class="col-lg-12" align="center">
+                       <img class="rounded" height="300" src="{{url_for('static',filename='images/record4.jpg')}}">
+
+                  </div>
+                </div>
+                <div class="card-body">
+                    <h2 style="padding-top:40px;font-family:Calibri;">Sign up to Automated Meetings</h2>
+                    <p style="padding-top:20px;">Sign up for free and start using automatic connecting to your meetings via our app.</p>
+                    <a href="{{url_for('user_bp.sign_up')}}" style="margin-top:30px;" type="button" class="btn btn-primary">Sign up for free</a>
+                </div>
+              </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12 col-xl-12 mx-auto" style="margin-top:40px;">
+              <div class="card  flex-row my-5">
+                <div class="card-img-left d-none d-md-flex">
+                  <div class="col-lg-12" >
+                    <h2 style="padding-top:40px;padding-left:75px;font-family:Calibri;">How to use ?</h2>
+                    <ul style="padding-top:20px;padding-left:140px;">
+                        <li class="li-item-help">
+                            <a href="#">Sign up</a>
+                        </li>
+                        <li class="li-item-help">
+                            Go to 'Your schedules' and create or add an existing schedule
+                        </li>
+                        <li class="li-item-help">
+                            If you created a new schedule, add yours lessons in edit section
+                        </li>
+                        <li class="li-item-help">
+                            Go to 'Start the day'. App will automaticaly connect you to your next meeting.
+                        </li>
+                    </ul>
+                    <p style="padding-bottom:30px;padding-top:20px;padding-left:80px;">
+                        For more detailed  approach, visit <a href="#">help</a> section.
+                    </p>
+
+                  </div>
+                </div>
+                <div class="card-body" align="center">
+                    <img class="rounded" height="300" src="{{url_for('static',filename='images/record5.jpg')}}">
+                </div>
+              </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div style="padding-top:85px;" class="col">
+                <h2 class="text-center">Supported Platforms:</h2>
+            </div>
+
+        </div>
+
+        <div class="row" style="padding-top:40px;padding-bottom:230px;">
+            <div class="col-4">
+                <a target="_blank" href="https://www.microsoft.com/sk-sk/microsoft-teams/group-chat-software">
+                    <img class="rounded mx-auto d-block" height="75" src="{{url_for('static',filename='images/logo_teams.png')}}">
+                </a>
+            </div>
+            <div class="col-4" style="padding-top:25px;">
+                 <a target="_blank" href="https://zoom.us/">
+                    <img class="rounded mx-auto d-block" height="35" src="{{url_for('static',filename='images/logo_zoom.png')}}">
+                 </a>
+            </div>
+            <div class="col-4">
+                <a target="_blank" href="https://meet.google.com/">
+                    <img class="rounded mx-auto d-block" height="85" src="{{url_for('static',filename='images/logo_gmeet.png')}}">
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 {% endblock content %}

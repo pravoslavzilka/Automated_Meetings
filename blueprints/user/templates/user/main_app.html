@@ -5,6 +5,18 @@
 {% endblock title %}
 
 {% block content %}
+
+    <script>
+		$(document).ready(function(){
+  		 	$(".active").removeClass("active");
+  		 	$("#main_app").addClass("active");
+		});
+	</script>
+
+    <audio id="myAudio">
+      <source src="{{ url_for('static',filename='alarm1') }}" type="audio/mpeg">
+    </audio>
+
     <div>
         <div class="row py-5 px-4" >
          <div class="col-md-8 mx-auto">
@@ -13,28 +25,28 @@
             {% if lesson %}
                 <h1>Your next lesson is in:</h1>
                 <h3 style="padding-top:10px;" id="demo"></h3>
-                <div style="margin-top:40px; " class="card">
+                <div style="margin-top:40px;margin-right:125px;margin-left:125px;" class="card">
                   <div class="card-header">
                     Info about the lesson
                   </div>
                   <div class="card-body">
                     <div>
-                        <label>Name</label>
+                        <label><strong>Name:</strong></label>
                         <label>{{ lesson.name }}</label>
                     </div>
                     <div>
-                        <label>Duration</label>
+                        <label><strong>Duration: </strong></label>
                         <label>{{ duration }}</label>
                     </div>
+
                     <div>
-                        <a href="{{ lesson.link }}">Link</a>
+                        <a href="{{ lesson.link }}">{{lesson.link}}</a>
                     </div>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+
                   </div>
                 </div>
             {% else %}
-                <h1>No such a lesson today</h1>
+                <h1 style="margin-top:40px;">No such a lesson today</h1>
             {% endif %}
         </div>
          </div>
@@ -46,6 +58,8 @@
     <script>
     // Set the date we're counting down to
     var countDownDate = new Date("{{count_down}}").getTime();
+
+    var sound = document.getElementById("myAudio");
 
     // Update the count down every 1 second
     var x = setInterval(function() {
@@ -69,12 +83,20 @@
       // If the count down is finished
       if (distance < 0) {
         clearInterval(x);
-        document.getElementById("demo").innerHTML = "EXPIRED";
-        window.open("https://www.w3schools.com");
         {% if lesson %}
-            window.location.href = "{{ lesson.link }}";
+            window.open("{{ lesson.link }}");
+            window.location.href = "{{ url_for('user_bp.main_app') }}";
+            document.getElementById("demo").innerHTML = "EXPIRED";
+
+
         {% endif %}
+
+
       }
     }, 1000);
+    function pauseAudio() {
+      sound.pause();
+    }
+    
     </script>
 {% endblock content %}

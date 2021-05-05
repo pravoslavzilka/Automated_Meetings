@@ -19,6 +19,8 @@
        .text-center {
           height:140px;
        }
+
+
        
     </style>
 
@@ -166,8 +168,8 @@
 
                   </td>
                 {% else %}
-                  <td class="td-main">
-                    <button type="button" class="btn btn-primary" data-bookid="{{lesson.number}}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">+</button>
+                  <td class="td-main plus-button">
+                    <button type="button" class="btn btn-primary plus-button-show" data-bookid="{{lesson.number}}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">+</button>
                   </td>
                 {% endif %}
               {% endfor %}
@@ -189,7 +191,7 @@
                     </div>
                   </td>
                 {% else %}
-                  <td class="td-main" >
+                  <td class="td-main plus-button" >
                     <button type="button" class="btn btn-primary" data-bookid="{{ lesson.number }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">+</button>
                   </td>
                 {% endif %}
@@ -212,7 +214,7 @@
                     </div>
                   </td>
                 {% else %}
-                  <td class="td-main" >
+                  <td class="td-main plus-button" >
                     <button type="button" class="btn btn-primary" data-bookid="{{ lesson.number }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">+</button>
                   </td>
                 {% endif %}
@@ -235,7 +237,7 @@
                     </div>
                   </td>
                 {% else %}
-                  <td class="td-main" >
+                  <td class="td-main plus-button" >
                     <button type="button" class="btn btn-primary" data-bookid="{{ lesson.number }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">+</button>
                   </td>
                 {% endif %}
@@ -257,7 +259,7 @@
                       </div>
                   </td>
                 {% else %}
-                  <td class="td-main" >
+                  <td class="td-main plus-button" >
                     <button type="button" class="btn btn-primary" data-bookid="{{ lesson.number }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">+</button>
                   </td>
                 {% endif %}
@@ -280,7 +282,7 @@
                     </div>
                   </td>
                 {% else %}
-                  <td class="td-main" >
+                  <td class="td-main plus-button" >
                     <button type="button" class="btn btn-primary" data-bookid="{{ lesson.number }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">+</button>
                   </td>
                 {% endif %}
@@ -303,7 +305,7 @@
                     </div>
                   </td>
                 {% else %}
-                  <td class="td-main" >
+                  <td class="td-main plus-button" >
                     <button type="button" class="btn btn-primary" data-bookid="{{ lesson.number }}" data-day="{{lesson.day}}" data-toggle="modal" data-target="#exampleModal">+</button>
                   </td>
                 {% endif %}
